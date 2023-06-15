@@ -1,7 +1,8 @@
 .credentials
 .vscode/
 .terraform/
-terraform.tfstate
+terraform.tfstate*
 .terraform.lock.hcl
 *.pub
 minecraft
+hosts*
