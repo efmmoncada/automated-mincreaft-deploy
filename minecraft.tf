@@ -11,7 +11,7 @@ terraform {
 provider "aws" {
   region                   = "us-east-1"
   shared_credentials_files = ["./.credentials"]
-  shared_config_files = [ "./.config" ]
+  shared_config_files      = ["./.config"]
   profile                  = "default"
 }
 
@@ -25,42 +25,42 @@ resource "aws_security_group" "minecraft_server_sg" {
 
   ingress {
     description = "SSH"
-    from_port = 22
-    to_port = 22
-    protocol = "tcp"
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
 
   ingress {
     description = "TCP Minecraft Port"
-    from_port = 25565
-    to_port = 25565
-    protocol = "tcp"
+    from_port   = 25565
+    to_port     = 25565
+    protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
 
   ingress {
     description = "HTTPS"
-    from_port = 443
-    to_port = 4434
-    protocol = "tcp"
+    from_port   = 443
+    to_port     = 4434
+    protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
 
   egress {
-    from_port = 0
-    to_port = 0
-    protocol = "-1"
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
 
 }
 
 resource "aws_instance" "minecraft_server" {
-  ami           = "ami-053b0d53c279acc90"
-  instance_type = "t2.large"
-  key_name      = aws_key_pair.minecraft_server_key.key_name
-  vpc_security_group_ids = [ aws_security_group.minecraft_server_sg.id ]
+  ami                    = "ami-053b0d53c279acc90"
+  instance_type          = "t2.large"
+  key_name               = aws_key_pair.minecraft_server_key.key_name
+  vpc_security_group_ids = [aws_security_group.minecraft_server_sg.id]
   tags = {
     Name = "Minecraft Server"
   }
