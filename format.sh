@@ -1,0 +1,2 @@
+echo "[servers]\n$(terraform output hostname) ansible_user=$(terraform output ansible_user) ansible_ssh_private_key_file=$(terraform output ansible_ssh_private_key_file)" > hosts
+sed -i -e 's/\"//g' hosts

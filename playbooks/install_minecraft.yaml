@@ -1,0 +1,42 @@
+- name: Install Minecraft Server
+  hosts: "*"
+  become: true
+  vars:
+    server_download_url: https://piston-data.mojang.com/v1/objects/84194a2f286ef7c14ed7ce0090dba59902951553/server.jar
+  tasks:
+    - name: Apt update
+      ansible.builtin.apt:
+        update_cache: true
+        name: "*"
+        state: present
+    - name: Install java deps
+      ansible.builtin.apt:
+        name:
+          - software-properties-common
+          - screen
+        state: present
+    - name: Install java
+      ansible.builtin.apt:
+        name: openjdk-17-jdk-headless
+        state: present
+    - name: Create working dir
+      ansible.builtin.command: mkdir -p /opt/minecraft
+      args:
+        creates: /opt/minecraft
+    - name: Download server file
+      ansible.builtin.get_url:
+        url: "{{ server_download_url }}"
+        dest: /opt/minecraft/server.jar
+        mode: 644
+    - name: Generate config files
+      ansible.builtin.command: java -jar server.jar --nogui
+      args:
+        chdir: /opt/minecraft
+    - name: accept eula
+      ansible.builtin.command: sed -i -e "s/false/true/g" eula.txt
+      args:
+        chdir: /opt/minecraft
+    - name: Start server
+      ansible.builtin.command: screen java -jar server.jar --nogui
+      args:
+        chdir: /opt/minecraft
